@@ -1,0 +1,29 @@
+[
+    {
+      "url" : "https://oalieno.github.io",
+      "range" : "domain",
+      "requests" : 20,
+      "mutation" : 10,
+      "query" :
+      {
+        "username" : "123"
+      },
+      "mutable-query" :
+      {
+        "password" : "",
+        "id" : 0
+      },
+      "header" :
+      {
+        "accept-encoding" : "gzip, deflate, sdch, br"
+      },
+      "postdata" :
+      {
+        "username" : "admin"
+      },
+      "mutable-postdata" :
+      {
+        "password" : "pass"
+      }
+    }
+]
