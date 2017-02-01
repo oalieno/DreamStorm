@@ -5,9 +5,9 @@ class Internal(object):
         self.qin = Queue.Queue()
         self.qout = Queue.Queue()
     def emptyin(self):
-        return qin.empty()
+        return self.qin.empty()
     def emptyout(self):
-        return qout.empty()
+        return self.qout.empty()
     def putin(self,data):
         self.qin.put(data)
     def putout(self,data):

@@ -19,7 +19,7 @@ class Connector:
                     opener = urllib2.build_opener()
                     response = opener.open(request)
                 except:
-                    tunnel.putout(task.items()+[('response',"")])
+                    tunnel.putout(dict(task.items() + {"response" : ""}.items()))
                     continue
                 page = response.read()
-                tunnel.putout(task.items()+[('response',page)])
+                tunnel.putout(dict(task.items() + {"response" : page}.items()))

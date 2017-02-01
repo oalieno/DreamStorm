@@ -5,29 +5,9 @@
       "requests" : 20,
       "mutations" : 10,
       "fuzzing" : false,
-      "stable-query" : 
-      {
-          "username" : "123"
-      },
-      "mutable-query" :
-      {
-          "password" : "",
-          "id" : 0
-      },
       "stable-header" :
       {
-            "accept-encoding" : "gzip, deflate, sdch, br"
-      },
-      "stable-postdata" :
-      {
-          "username" : "admin"
-      },
-      "mutable-postdata" :
-      {
-          "password" : "pass"
+        "accept-encoding" : "gzip, deflate, sdch, br"
       }
-    },
-    {
-      "url" : "https://hackablewebsite.com"
     }
 ]

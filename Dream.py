@@ -1,4 +1,6 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import sys
 import json
 import threading
@@ -7,13 +9,22 @@ from lib.core.tunnel.Internal import Internal
 from lib.core.Connector import Connector
 from lib.core.Agent import Agent
 from lib.utils.Config import check
+from lib.utils.Log import Log
+
+log = Log(__name__)
 
 # Load config and missions
 with open('config.json','r') as data:
-    config = json.load(data)
+    try:
+        config = json.load(data)
+    except ValueError as error:
+        log.error("In config.json : " + str(error))
 
 with open("missions.json",'r') as data:
-    missions = json.load(data)
+    try:
+        missions = json.load(data)
+    except ValueError as error:
+        log.error("In missions.json : " + str(error))
 
 check(config,missions)
 
@@ -54,13 +65,13 @@ for i,mission in enumerate(missions):
     agent_threads[i].start()
 
 # Put initial tasks
-for mission in missions:
-    connector_tunnels[now].putin({"url" : mission["url"], "header" : {}, "postdata" : {}})
+for i,mission in enumerate(missions):
+    connector_tunnels[now].putin({"index" : i, "url" : mission["url"], "header" : {}, "postdata" : {}})
     connector_counter += 1
     now = (now+1)%total
 
 # Start running
-while connector_counter and agent_counter:
+while connector_counter or agent_counter:
     # Get response from Connector
     for i,tunnel in enumerate(connector_tunnels):
         if not tunnel.emptyout():
@@ -75,7 +86,7 @@ while connector_counter and agent_counter:
             data = tunnel.getout()
             agent_counter -= 1
             for task in data:
-                connector_tunnels[now].putin(dict([("index",i)]+task.items))
+                connector_tunnels[now].putin(dict({"index" : i}.items() + task.items()))
                 connector_counter += 1
                 now = (now+1)%total
 
