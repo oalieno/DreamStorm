@@ -5,10 +5,11 @@ from lib.utils.Log import Log
 
 def check(config,missions):
     log = Log(__name__)
-    config_keys = ["Connector-threads","Connector-tor","Connector-tor-password"]
+    config_keys = ["Connector-threads","Connector-tor","Connector-tor-password","mode","ip","port"]
     config_default = {
         "Connector-threads" : 5,
-        "Connector-tor" : True
+        "Connector-tor" : True,
+        "mode" : "local"
     }
     mission_setting_keys = ["url","range","requests","mutations","fuzzing"]
     mission_data_keys = ["stable-query","mutable-query","stable-header","mutable-header","stable-postdata","mutable-postdata"]
@@ -24,7 +25,7 @@ def check(config,missions):
     # Check whether we have that setting name
     for key,value in config.iteritems():
         if key not in (config_keys + mission_setting_keys + mission_data_keys):
-            log.error("In config.json" + key + " -> this option is not supported")
+            log.error("In config.json : " + key + " -> this option is not supported")
 
 
     # Set default value
@@ -35,6 +36,10 @@ def check(config,missions):
     # Check for constrain
     if config["Connector-tor"] and not config.get("Connector-tor-password"):
         log.error("In config.json : " + "You didn't provide your tor password")
+    if config["mode"] not in ("local","remote"):
+        log.error("In config.json : " + "we don't support this mode -> " + config["mode"])
+    if config["mode"] == "remote" and not config.get("ip") or not config.get("port"):
+        log.error("In config.json : " + "You didn't provide your server ip and port to listen")
 
     '''
     Checking Missions
@@ -76,6 +81,9 @@ def check(config,missions):
         if re.search("^https?://",mission['url']) == None:
             mission['url'] = "http://" + mission['url']
         mission['url'] = mission['url'].rstrip('/')
+
+        # url not end with '/'
+        mission["url"] = mission["url"].strip('/')
 
         # Compute the domain
         head = mission['url'].find("//")
