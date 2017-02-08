@@ -4,15 +4,20 @@ import threading
 
 with open("source/common-name-list.txt","r") as data:
     names = data.read().strip().split('\n')
+with open("source/generic-sqli.txt","r") as data:
+    sqlis = data.read().strip().split('\n')
 
-def iterate(initial,distance):
+def iterate(initial,distance,mode):
     if type(initial) is int:
         return initial + distance
     elif type(initial) is str:
-        if initial:
-            return initial if distance == 0 else names[distance-1]
-        else:
-            return names[distance]
+        if mode == "default":
+            if initial:
+                return initial if distance == 0 else names[distance-1]
+            else:
+                return names[distance]
+        elif mode == "sqli":
+            return sqlis[distance]
 
 nonspace = re.compile(r'\S')
 

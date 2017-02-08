@@ -69,7 +69,7 @@ class Manager:
             if self.config["mode"] == "remote":
                 while not cServer.alives["Connector" + str(connectorNext)]:
                     connectorNext = (connectorNext + 1) % connectorTotal
-            cQueue[connectorNext][0].put({"index" : i, "url" : mission["url"], "header" : {}, "postdata" : {}})
+            cQueue[connectorNext][0].put({"index" : i, "origin" : "Pager", "url" : mission["url"], "header" : {}, "postdata" : {}})
             connectorNext = (connectorNext + 1) % connectorTotal
             cCounter += 1
 
@@ -83,7 +83,7 @@ class Manager:
                         if self.config["mode"] == "remote":
                             while not cServer.alives["Connector" + str(connectorNext)]:
                                 connectorNext = (connectorNext + 1) % connectorTotal
-                        cQueue[connectorNext][0].put(dict(d.items() + {"index" : i}.items()))
+                        cQueue[connectorNext][0].put(dict(d.items() + {"index" : i,"origin" : "Pager"}.items()))
                         connectorNext = (connectorNext + 1) % connectorTotal
                         cCounter += 1
                 if not fQueue[i][1].empty():
@@ -93,14 +93,15 @@ class Manager:
                         if self.config["mode"] == "remote":
                             while not cServer.alives[connectorNext]:
                                 connectorNext = (connectorNext + 1) % connectorTotal
-                        cQueue[connectorNext][0].put(dict(d.items() + {"index" : i}.items()))
+                        cQueue[connectorNext][0].put(dict(d.items() + {"index" : i,"origin" : "Fuzzer"}.items()))
                         connectorNext = (connectorNext + 1) % connectorTotal
                         cCounter += 1
             for i in xrange(connectorTotal):
                 if not cQueue[i][1].empty():
                     data = cQueue[i][1].get()
                     cCounter -= 1
-                    pQueue[data["index"]][0].put(data)
-                    fQueue[data["index"]][0].put(data)
-                    pCounter += 1
-                    fCounter += 1
+                    if data["response"]:
+                        pQueue[data["index"]][0].put(data)
+                        pCounter += 1
+                        fQueue[data["index"]][0].put(data)
+                        fCounter += 1

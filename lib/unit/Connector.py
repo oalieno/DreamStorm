@@ -1,4 +1,5 @@
 import socks
+import socket
 
 from lib.core import connect 
 
@@ -10,7 +11,7 @@ class Connector:
                 self.config = self.q[0].get()
                 break
     def run(self):
-        if self.config.get('tor'):
+        if self.config['Connector-tor']:
             socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
             socket.socket = socks.socksocket
         while True:

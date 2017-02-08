@@ -1,13 +1,9 @@
 [
     {
-      "url" : "https://oalieno.github.io",
+      "url" : "https://plus.nctu.edu.tw/",
       "range" : "domain",
       "requests" : 20,
       "mutations" : 10,
-      "fuzzing" : false,
-      "stable-header" :
-      {
-        "accept-encoding" : "gzip, deflate, sdch, br"
-      }
+      "fuzzing" : false
     }
 ]
