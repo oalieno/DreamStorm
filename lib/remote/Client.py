@@ -4,9 +4,8 @@ import socket
 from lib.utils.Utils import daemonThread,iterParse
 
 class Client:
-    def __init__(self,q,ip,port):
+    def __init__(self,q):
         self.q = q
-        daemonThread(self.listen,(ip,port))
     def listen(self,ip,port):
         sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         sock.settimeout(1)

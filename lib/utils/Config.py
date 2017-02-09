@@ -52,13 +52,13 @@ def check(config,missions):
 
         # Set global setting value
         for key in mission_setting_keys:
-            if not mission.get(key) and config.get(key):
+            if mission.get(key) == None and config.get(key) != None:
                 mission[key] = config[key]
 
         # Set global data value
         for key in mission_data_keys:
-            if config.get(key):
-                if mission.get(key):
+            if config.get(key) != None:
+                if mission.get(key) != None:
                     mission[key] = dict(config[key].items() + mission[key].items())
                 else:
                     mission[key] = config[key]
@@ -67,10 +67,10 @@ def check(config,missions):
         for key,value in mission_setting_default.iteritems():
             if key not in mission:
                 mission[key] = value
-
+        
         # Guarantee we have at lest a empty dictionary
         for key in mission_data_keys:
-            if not mission.get(key):
+            if mission.get(key) == None:
                 mission[key] = {}
 
         # Check for constrain

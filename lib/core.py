@@ -59,7 +59,7 @@ def generate(mission,url):
     results = mutate(mission["mutations"],initials,"default")
     for result in results:
         now = 0
-        task = {"url" : url, "header" : header, "postdata" : postdata}
+        task = {"type" : "page", "url" : url, "header" : header, "postdata" : postdata}
         for key,value in mission["mutable-query"].iteritems():
             task["url"] = appendQueries(task["url"],result[now])
             now += 1
@@ -87,9 +87,9 @@ def fuzz(mission,data):
             for i,key in enumerate(keys):
                 queries[key] = result[i]
             if method == "get":
-                task.append({"url" : appendQueries(url,queries), "header" : {}, "postdata" : {}})
+                task.append({"type" : "fuzz", "url" : appendQueries(url,queries), "header" : {}, "postdata" : {}})
             else:
-                task.append({"url" : url, "header" : {}, "postdata" : queries})
+                task.append({"type" : "fuzz", "url" : url, "header" : {}, "postdata" : queries})
         tasks += task
     return tasks
 
@@ -106,3 +106,11 @@ def connect(url,header,postdata):
         return ""
     page = response.read().decode("utf-8","ignore")
     return page
+
+def analyze(mission,data):
+    results = []
+    soup = BeautifulSoup(data["response"],'lxml')
+    iframes = soup.find_all("iframe")
+    for iframe in iframes:
+        url = 0
+    return ""
