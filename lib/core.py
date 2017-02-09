@@ -112,5 +112,8 @@ def analyze(mission,data):
     soup = BeautifulSoup(data["response"],'lxml')
     iframes = soup.find_all("iframe")
     for iframe in iframes:
-        url = 0
+        url = iframe.get("src")
+        if "https://www.googletagmanager.com" in url:
+            url = None
+        print url
     return ""

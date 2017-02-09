@@ -4,9 +4,11 @@ from lib.remote.Server import Server
 from lib.unit.Agent import Agent
 from lib.unit.Connector import Connector
 from lib.utils.Utils import daemonThread
+from lib.utils.Log import Log
 
 class Manager:
     def __init__(self,config,missions):
+        self.log = Log(__name__)
         self.config = config
         self.missions = missions
     def run(self):
@@ -58,7 +60,7 @@ class Manager:
             if self.config["mode"] == "remote":
                 while not cServer.alives[connectorNext]:
                     connectorNext = (connectorNext + 1) % connectorTotal
-            cQueue[connectorNext][0].put({"index" : i, "type" : "page", "url" : mission["url"], "header" : {}, "postdata" : {}})
+            cQueue[connectorNext][0].put({"index" : i, "type" : "page", "url" : mission["url"], "header" : mission["stable-header"], "postdata" : mission["stable-postdata"]})
             connectorNext = (connectorNext + 1) % connectorTotal
             cCounter += 1
 
@@ -80,6 +82,7 @@ class Manager:
                     data = cQueue[i][1].get()
                     cCounter -= 1
                     if data["response"]:
+                        self.log.info(data["url"])
                         index = data.pop("index")
                         aQueue[index][0].put(data)
                         aCounter += 1

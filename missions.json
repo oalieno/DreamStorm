@@ -2,8 +2,7 @@
     {
       "url" : "https://plus.nctu.edu.tw/",
       "range" : "domain",
-      "requests" : 20,
-      "mutations" : 10,
+      "requests" : 20, "mutations" : 10,
       "fuzzing" : false
     }
 ]

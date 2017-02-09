@@ -91,6 +91,7 @@ def check(config,missions):
         mission['domain'] = mission['url'] if tail == -1 else mission['url'][:head+2+tail]
 
         # Check whether the url is valid
+        '''
         try:
             response = urllib.urlopen(mission['url'])
         except KeyboardInterrupt:
@@ -98,3 +99,4 @@ def check(config,missions):
             sys.exit(0)
         except:
             log.error("This url is not vaild : " + mission['url'])
+        '''
