@@ -1,3 +1,4 @@
+import json
 import Queue
 
 from lib.remote.Server import Server
@@ -56,11 +57,13 @@ class Manager:
         connectorTotal = self.config["Connector-threads"]
 
         # put initial tasks
-        for i,mission in enumerate(self.missions):
+        initials = [{"index" : i, "type" : "page", "url" : mission["url"], "header" : mission["stable-header"], "postdata" : mission["stable-postdata"]} for i,mission in enumerate(self.missions)]
+        initials.append({"index" : -1, "type" : "ip-test", "url" : "http://jsonip.com", "header" : {}, "postdata" : {}})
+        for initial in initials:
             if self.config["mode"] == "remote":
                 while not cServer.alives[connectorNext]:
                     connectorNext = (connectorNext + 1) % connectorTotal
-            cQueue[connectorNext][0].put({"index" : i, "type" : "page", "url" : mission["url"], "header" : mission["stable-header"], "postdata" : mission["stable-postdata"]})
+            cQueue[connectorNext][0].put(initial)
             connectorNext = (connectorNext + 1) % connectorTotal
             cCounter += 1
 
@@ -82,7 +85,10 @@ class Manager:
                     data = cQueue[i][1].get()
                     cCounter -= 1
                     if data["response"]:
-                        self.log.info(data["url"])
-                        index = data.pop("index")
-                        aQueue[index][0].put(data)
-                        aCounter += 1
+                        if data["type"] == "ip-test":
+                            self.log.info("now ip : " + json.loads(data["response"])["ip"])
+                        else:
+                            self.log.info(data["url"])
+                            index = data.pop("index")
+                            aQueue[index][0].put(data)
+                            aCounter += 1
