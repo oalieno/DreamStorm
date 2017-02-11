@@ -1,5 +1,9 @@
 import re
 import json
+import socks
+import socket
+import urllib
+import urllib2
 import threading
 
 with open("source/common-name-list.txt","r") as data:
@@ -46,3 +50,22 @@ def appendQueries(url,queries):
                 url += '&'
             url += key + '=' + str(value)
     return url
+
+def tor():
+    socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
+    socket.socket = socks.socksocket
+
+def connect(url,header = {},postdata = {}):
+    postdata = urllib.urlencode(postdata)
+    try:
+        if postdata:
+            request = urllib2.Request(url,headers = header,data = postdata)
+        else:
+            request = urllib2.Request(url,headers = header)
+        opener = urllib2.build_opener()
+        response = opener.open(request)
+    except:
+        return "",{}
+    page = response.read().decode("utf-8","ignore")
+    info = response.info()
+    return page,info

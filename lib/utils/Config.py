@@ -1,5 +1,4 @@
 import re
-import urllib
 
 from lib.utils.Log import Log
 
@@ -11,7 +10,7 @@ def check(config,missions):
         "Connector-tor" : True,
         "mode" : "local"
     }
-    mission_setting_keys = ["url","range","requests","mutations","fuzzing"]
+    mission_setting_keys = ["url","range","requests","mutations","fuzzing","css-selector"]
     mission_data_keys = ["stable-query","mutable-query","stable-header","mutable-header","stable-postdata","mutable-postdata"]
     mission_setting_default = {
         "range" : "domain",
@@ -89,14 +88,3 @@ def check(config,missions):
         head = mission['url'].find("//")
         tail = mission['url'][head+2:].find("/")
         mission['domain'] = mission['url'] if tail == -1 else mission['url'][:head+2+tail]
-
-        # Check whether the url is valid
-        '''
-        try:
-            response = urllib.urlopen(mission['url'])
-        except KeyboardInterrupt:
-            log.info("You pressed Ctrl+C")
-            sys.exit(0)
-        except:
-            log.error("This url is not vaild : " + mission['url'])
-        '''

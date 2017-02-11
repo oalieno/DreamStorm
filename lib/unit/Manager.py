@@ -4,12 +4,14 @@ import Queue
 from lib.remote.Server import Server
 from lib.unit.Agent import Agent
 from lib.unit.Connector import Connector
-from lib.utils.Utils import daemonThread
+from lib.utils.DB import DB
+from lib.utils.utils import daemonThread,tor,connect
 from lib.utils.Log import Log
 
 class Manager:
     def __init__(self,config,missions):
         self.log = Log(__name__)
+        self.db = DB()
         self.config = config
         self.missions = missions
     def run(self):
@@ -56,9 +58,19 @@ class Manager:
         connectorNext = 0
         connectorTotal = self.config["Connector-threads"]
 
+        # test ip
+        if self.config["mode"] == "remote":
+            while not cServer.alives[connectorNext]:
+                connectorNext = (connectorNext + 1) % connectorTotal
+        cQueue[connectorNext][0].put({"index" : -1, "type" : "test-ip", "url" : "http://jsonip.com", "header" : {}, "postdata" : {}})
+        while True:
+            if not cQueue[connectorNext][1].empty():
+                data = cQueue[connectorNext][1].get()
+                self.log.info("now ip -> " + json.loads(data["response"])["ip"])
+                break
+
         # put initial tasks
         initials = [{"index" : i, "type" : "page", "url" : mission["url"], "header" : mission["stable-header"], "postdata" : mission["stable-postdata"]} for i,mission in enumerate(self.missions)]
-        initials.append({"index" : -1, "type" : "ip-test", "url" : "http://jsonip.com", "header" : {}, "postdata" : {}})
         for initial in initials:
             if self.config["mode"] == "remote":
                 while not cServer.alives[connectorNext]:
@@ -74,21 +86,27 @@ class Manager:
                     data = aQueue[i][1].get()
                     aCounter -= 1
                     for d in data:
-                        if self.config["mode"] == "remote":
-                            while not cServer.alives[connectorNext]:
-                                connectorNext = (connectorNext + 1) % connectorTotal
-                        cQueue[connectorNext][0].put(dict(d.items() + {"index" : i}.items()))
-                        connectorNext = (connectorNext + 1) % connectorTotal
-                        cCounter += 1
+                        if d["type"] == "vulnerability":
+                            if d["data"]:
+                                self.log.warning(d["url"] + " -> " + str(d["data"]))
+                                self.db.store(d)
+                        elif d["type"] == "collection":
+                            if d["data"]:
+                                self.log.info(d["url"] + " -> " + str(d["data"]))
+                                self.db.store(d)
+                        else:
+                            if self.config["mode"] == "remote":
+                                while not cServer.alives[connectorNext]:
+                                    connectorNext = (connectorNext + 1) % connectorTotal
+                            cQueue[connectorNext][0].put(dict(d.items() + {"index" : i}.items()))
+                            connectorNext = (connectorNext + 1) % connectorTotal
+                            cCounter += 1
             for i in xrange(connectorTotal):
                 if not cQueue[i][1].empty():
                     data = cQueue[i][1].get()
                     cCounter -= 1
                     if data["response"]:
-                        if data["type"] == "ip-test":
-                            self.log.info("now ip : " + json.loads(data["response"])["ip"])
-                        else:
-                            self.log.info(data["url"])
-                            index = data.pop("index")
-                            aQueue[index][0].put(data)
-                            aCounter += 1
+                        self.log.info(data["url"])
+                        index = data.pop("index")
+                        aQueue[index][0].put(data)
+                        aCounter += 1

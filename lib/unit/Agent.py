@@ -1,4 +1,4 @@
-from lib.core import page,fuzz,analyze
+from lib.core import page,fuzz,analyze,collect
 from lib.utils.Log import Log
 
 class Agent:
@@ -17,4 +17,5 @@ class Agent:
                 if self.mission["fuzzing"]:
                     results += fuzz(self.mission,data)
                 results += analyze(self.mission,data)
+                results += collect(self.mission,data)
                 self.q[1].put(results)

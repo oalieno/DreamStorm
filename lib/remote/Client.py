@@ -1,7 +1,7 @@
 import json
 import socket
 
-from lib.utils.Utils import daemonThread,iterParse
+from lib.utils.utils import daemonThread,iterParse
 
 class Client:
     def __init__(self,q):

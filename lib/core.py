@@ -1,10 +1,8 @@
 import re
-import urllib
-import urllib2
 
 from bs4 import BeautifulSoup
 
-from lib.utils.Utils import appendQueries,iterate
+from lib.utils.utils import appendQueries,iterate,connect
 
 def absolute(myrange,domain,url,append):
     if append == None:
@@ -93,27 +91,33 @@ def fuzz(mission,data):
         tasks += task
     return tasks
 
-def connect(url,header,postdata):
-    postdata = urllib.urlencode(postdata)
-    try:
-        if postdata:
-            request = urllib2.Request(url,headers = header,data = postdata)
-        else:
-            request = urllib2.Request(url,headers = header)
-        opener = urllib2.build_opener()
-        response = opener.open(request)
-    except:
-        return ""
-    page = response.read().decode("utf-8","ignore")
-    return page
-
 def analyze(mission,data):
     results = []
     soup = BeautifulSoup(data["response"],'lxml')
+
+    # a fuzzing test has been responsed
+    if data["type"] == "fuzz":
+        results.append("the server response the fuzzing test")
+
+    # iframes CSRF detection
     iframes = soup.find_all("iframe")
     for iframe in iframes:
         url = iframe.get("src")
-        if "https://www.googletagmanager.com" in url:
-            url = None
-        print url
-    return ""
+        if "https://www.googletagmanager.com" not in url and iframe.get("width") == 0 and iframe.get("height") == 0:
+            results.append(url + " -> an iframe contains this url and has width and height both 0 ( might be CSRF )")
+
+    # images CSRF detection
+    images = soup.find_all("img")
+    for image in images:
+        url = image.get("src")
+        if url:
+            page,info = connect(url)
+        if info.get("Content-Type") and "image" not in info["Content-Type"]:
+            results.append(url + " -> this image didn't response with image, it response with type " + info["Content-Type"] + " ( might be CSRF )")
+
+    return [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : results}]
+
+def collect(mission,data):
+    soup = BeautifulSoup(data["response"],'lxml')
+    items = soup.select(mission["css-selector"])
+    return [{"type" : "collection", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : [item.string for item in items if item.string]}]

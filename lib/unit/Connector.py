@@ -1,7 +1,7 @@
 import socks
 import socket
 
-from lib.core import connect 
+from lib.utils.utils import connect,tor
 
 class Connector:
     def __init__(self,q):
@@ -12,10 +12,9 @@ class Connector:
                 break
     def run(self):
         if self.config['Connector-tor']:
-            socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
-            socket.socket = socks.socksocket
+            tor()
         while True:
             if not self.q[0].empty():
                 task = self.q[0].get()
-                page = connect(task["url"],task["header"],task["postdata"])
+                page,info = connect(task["url"],task["header"],task["postdata"])
                 self.q[1].put(dict(task.items() + {"response" : page}.items()))
