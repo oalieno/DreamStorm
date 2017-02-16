@@ -1,6 +1,6 @@
 # Dream  [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-Automated Crawler with **Vulnerability Scanner**
+Automated Website Analyzer and Intelligence Collection
 
 ## Dependency
 
