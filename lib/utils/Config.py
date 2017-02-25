@@ -15,7 +15,7 @@ def check(config,missions):
     mission_setting_default = {
         "range" : "domain",
         "requests" : 20,
-        "mutation" : 10,
+        "mutations" : 10,
         "fuzzing" : False
     }
     '''
@@ -33,8 +33,10 @@ def check(config,missions):
             config[key] = value
 
     # Check for constrain
+    '''
     if config["Connector-tor"] and not config.get("Connector-tor-password"):
         log.error("In config.json : " + "You didn't provide your tor password")
+    '''
     if config["mode"] not in ("local","remote"):
         log.error("In config.json : " + "we don't support this mode -> " + config["mode"])
     if config["mode"] == "remote" and not config.get("ip") or not config.get("port"):

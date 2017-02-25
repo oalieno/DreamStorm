@@ -103,7 +103,7 @@ def analyze(mission,data):
     iframes = soup.find_all("iframe")
     for iframe in iframes:
         url = iframe.get("src")
-        if "https://www.googletagmanager.com" not in url and iframe.get("width") == 0 and iframe.get("height") == 0:
+        if url and "https://www.googletagmanager.com" not in url and iframe.get("width") == 0 and iframe.get("height") == 0:
             results.append(url + " -> an iframe contains this url and has width and height both 0 ( might be CSRF )")
 
     # images CSRF detection

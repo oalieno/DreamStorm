@@ -10,6 +10,7 @@ class Agent:
                 break
     def run(self):
         wholelist = [self.mission['url']]
+        first = True
         while True:
             if not self.q[0].empty():
                 data = self.q[0].get()
@@ -18,5 +19,7 @@ class Agent:
                     results += fuzz(self.mission,data)
                 results += analyze(self.mission,data)
                 results += collect(self.mission,data)
-                results += version(self.mission,data)
+                if first:
+                    results += version(self.mission,data)
+                    first = False
                 self.q[1].put(results)
