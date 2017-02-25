@@ -2,6 +2,10 @@
 
 Automated Website Analyzer and Intelligence Collection
 
+## Version
+
+now is on version 2.0
+
 ## Dependency
 
 ### BeautifulSoup ( https://www.crummy.com/software/BeautifulSoup/bs4/doc/ )
