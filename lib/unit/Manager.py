@@ -17,7 +17,7 @@ class Manager:
     def run(self):
         '''
         Connector tunnel in : {"index" : integer, "type" : string, "url" : string, "header" : dictionary, "postdata" : dictionary}
-        Connector tunnel out : {"index" : integet, "type" : string, "url" : string, "header" : dictionary, "postdata" : dictionary, "response" : string}
+        Connector tunnel out : {"index" : integet, "type" : string, "url" : string, "header" : dictionary, "postdata" : dictionary, "response" : string, "response-header" : dictionary}
         '''
 
         '''
@@ -89,11 +89,11 @@ class Manager:
                         if d["type"] == "vulnerability":
                             if d["data"]:
                                 self.log.warning(d["url"] + " -> " + str(d["data"]))
-                                self.db.store(d)
+                                #self.db.store(d)
                         elif d["type"] == "collection":
                             if d["data"]:
                                 self.log.info(d["url"] + " -> " + str(d["data"]))
-                                self.db.store(d)
+                                #self.db.store(d)
                         else:
                             if self.config["mode"] == "remote":
                                 while not cServer.alives[connectorNext]:

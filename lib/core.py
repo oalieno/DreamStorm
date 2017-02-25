@@ -121,3 +121,9 @@ def collect(mission,data):
     soup = BeautifulSoup(data["response"],'lxml')
     items = soup.select(mission["css-selector"])
     return [{"type" : "collection", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : [item.string for item in items if item.string]}]
+
+def version(mission,data):
+    results = []
+    if data["response-header"].get("server"):
+        results = [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : "The server type and version is : " + data["response-header"]["server"]}]
+    return results

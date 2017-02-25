@@ -1,4 +1,4 @@
-from lib.core import page,fuzz,analyze,collect
+from lib.core import page,fuzz,analyze,collect,version
 from lib.utils.Log import Log
 
 class Agent:
@@ -18,4 +18,5 @@ class Agent:
                     results += fuzz(self.mission,data)
                 results += analyze(self.mission,data)
                 results += collect(self.mission,data)
+                results += version(self.mission,data)
                 self.q[1].put(results)

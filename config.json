@@ -8,6 +8,6 @@
     },
     "fuzzing" : true,
     "Connector-threads": 10,
-    "Connector-tor" : false,
+    "Connector-tor" : true,
     "Connector-tor-password" : "YourPassword"
 }
