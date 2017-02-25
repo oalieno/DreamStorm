@@ -1,4 +1,4 @@
-# Dream  [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+# DreamStorm  [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 Automated Website Analyzer and Intelligence Collection
 
@@ -25,7 +25,7 @@ config.json is the global setting
 you can assign multiple missions in missions.json
 
 ```
-./Dream.py
+./DreamStorm.py
 ```
 
 and just run it...
