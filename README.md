@@ -15,3 +15,17 @@ sudo apt-get install python-bs4
 ```
 sudo apt-get install tor
 ```
+
+## Usage
+
+edit config.json and missions.json
+
+config.json is the global setting
+
+you can assign multiple missions in missions.json
+
+```
+./Dream.py
+```
+
+and just run it...
