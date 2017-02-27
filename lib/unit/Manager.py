@@ -35,7 +35,7 @@ class Manager:
         for i in xrange(self.config["Connector-threads"]):
             cQueue[i][0].put(self.config)
 
-        # start pager locally
+        # start agent locally
         for i,mission in enumerate(self.missions):
             a = Agent(aQueue[i])
             daemonThread(a.run)

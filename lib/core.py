@@ -1,4 +1,5 @@
 import re
+import json
 
 from bs4 import BeautifulSoup
 
@@ -118,12 +119,22 @@ def analyze(mission,data):
     return [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : results}]
 
 def collect(mission,data):
-    soup = BeautifulSoup(data["response"],'lxml')
-    items = soup.select(mission["css-selector"])
-    return [{"type" : "collection", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : [item.string for item in items if item.string]}]
+    results = []
+    if mission.get("css-selector"):
+        soup = BeautifulSoup(data["response"],'lxml')
+        items = soup.select(mission["css-selector"])
+        results = [{"type" : "collection", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : [item.string for item in items if item.string]}]
+    return results
 
 def version(mission,data):
     results = []
     if data["response-header"].get("server"):
-        results = [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : "The server type and version is : " + data["response-header"]["server"]}]
+        server = data["response-header"]["server"]
+        ver = server[server.find('/')+1:server.find('(')].strip() if server.find('/') != -1 else ""
+        system = server[server.find('('):-1].strip() if server.find('(') != -1 else ""
+        server = server[:server.find('/')] if server.find('/') != -1 else server
+        server = server.lower()
+        cve,info = connect("http://cve.circl.lu/api/search"+("/"+server)*2)
+        cve = json.loads(cve)
+        results = [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : "The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve)) + " cve exploits found!"}]
     return results
