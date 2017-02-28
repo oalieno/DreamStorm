@@ -6,12 +6,18 @@ from bs4 import BeautifulSoup
 from lib.utils.utils import appendQueries,iterate,connect
 
 def absolute(myrange,domain,url,append):
-    if append == None:
+    if not append:
         return None
     if re.search("^//",append) != None:
         return None
+    # If don't have http or https prefix
     if re.search("^https?://",append) == None:
-        append = domain + '/' + append.strip('/')
+        # absolute url
+        if append[0] == '/':
+            append = domain + '/' + append.strip('/')
+        # relative url
+        else:
+            append = url + '/' + append.strip('/')
     append = append.partition('#')[0].strip('/')
     if myrange == "domain" and domain not in append:
         append = None

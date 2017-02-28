@@ -4,14 +4,14 @@ import Queue
 from lib.remote.Server import Server
 from lib.unit.Agent import Agent
 from lib.unit.Connector import Connector
-from lib.utils.DB import DB
+#from lib.utils.DB import DB
 from lib.utils.utils import daemonThread,tor,connect
 from lib.utils.Log import Log
 
 class Manager:
     def __init__(self,config,missions):
         self.log = Log(__name__)
-        self.db = DB()
+        #self.db = DB()
         self.config = config
         self.missions = missions
     def run(self):

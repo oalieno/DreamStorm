@@ -1,10 +1,7 @@
 [
     {
-        "url" : "https://plus.nctu.edu.tw",
-        "range" : "domain",
-        "requests" : 20,
-        "mutations" : 10,
-        "fuzzing" : false,
-        "css-selector" : ".parallelogram2"
+        "url" : "http://192.168.56.101/mutillidae/",
+        "range" : "subdomain",
+        "fuzzing" : true
     }
 ]

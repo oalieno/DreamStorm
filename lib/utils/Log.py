@@ -22,5 +22,5 @@ class Log:
         self.logger.warning(Color.bold+Color.yellow+"\t"+text+Color.normal)
     def error(self,text):
         self.logger.error(Color.bold+Color.red+"\t"+text+Color.normal)
-        self.logger.error(Color.bold+Color.red+"\t"+"type -h to see the usage"+Color.normal)
+        #self.logger.error(Color.bold+Color.red+"\t"+"type -h to see the usage"+Color.normal)
         sys.exit(0)
