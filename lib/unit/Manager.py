@@ -88,7 +88,7 @@ class Manager:
                     for d in data:
                         if d["type"] == "vulnerability":
                             if d["data"]:
-                                self.log.warning(d["url"] + " -> " + str(d["data"]))
+                                self.log.warning(d["url"] + " with " + str(d["header"]) + " and " + str(d["postdata"]) + " -> " + str(d["data"]))
                                 #self.db.store(d)
                         elif d["type"] == "collection":
                             if d["data"]:

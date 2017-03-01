@@ -10,6 +10,7 @@ def absolute(myrange,domain,url,append):
         return None
     if re.search("^//",append) != None:
         return None
+
     # If don't have http or https prefix
     if re.search("^https?://",append) == None:
         # absolute url
@@ -19,6 +20,7 @@ def absolute(myrange,domain,url,append):
         else:
             append = url + '/' + append.strip('/')
     append = append.partition('#')[0].strip('/')
+
     if myrange == "domain" and domain not in append:
         append = None
     if myrange == "subdomain" and url not in append:
@@ -27,14 +29,14 @@ def absolute(myrange,domain,url,append):
         append = None
     return append
 
-def page(mission,data,wholelist):
+def page(mission,data,urllist):
     soup = BeautifulSoup(data['response'],'lxml')
     urls = soup.find_all('a')
     tasks = []
     for url in urls:
         url = absolute(mission["range"],mission["domain"],mission["url"],url.get('href'))
-        if url and url not in wholelist:
-            wholelist.append(url)
+        if url and url not in urllist:
+            urllist.append(url)
             tasks += generate(mission,url)
     return tasks
 
@@ -77,7 +79,7 @@ def generate(mission,url):
         tasks.append(task)
     return tasks
 
-def fuzz(mission,data):
+def fuzz(mission,data,urllist):
     tasks = []
     soup = BeautifulSoup(data["response"],'lxml')
     forms = soup.find_all("form")
@@ -101,10 +103,6 @@ def fuzz(mission,data):
 def analyze(mission,data):
     results = []
     soup = BeautifulSoup(data["response"],'lxml')
-
-    # a fuzzing test has been responsed
-    if data["type"] == "fuzz":
-        results.append("the server response the fuzzing test")
 
     # iframes CSRF detection
     iframes = soup.find_all("iframe")
@@ -136,11 +134,9 @@ def version(mission,data):
     results = []
     if data["response-header"].get("server"):
         server = data["response-header"]["server"]
+        print server
         ver = server[server.find('/')+1:server.find('(')].strip() if server.find('/') != -1 else ""
         system = server[server.find('('):-1].strip() if server.find('(') != -1 else ""
         server = server[:server.find('/')] if server.find('/') != -1 else server
-        server = server.lower()
-        cve,info = connect("http://cve.circl.lu/api/search"+("/"+server)*2)
-        cve = json.loads(cve)
-        results = [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : "The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve)) + " cve exploits found!"}]
+        #results = [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : "The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve)) + " cve exploits found!"}]
     return results

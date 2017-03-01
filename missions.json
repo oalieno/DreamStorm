@@ -1,7 +1,5 @@
 [
     {
-        "url" : "http://192.168.56.101/mutillidae/",
-        "range" : "subdomain",
-        "fuzzing" : true
+        "url" : "http://plus.nctu.edu.tw"
     }
 ]
