@@ -135,15 +135,19 @@ def collect(mission,data):
 
 def version(mission,data,versionlist):
     results = []
-    if data["response-header"].get("server") and data["response-header"]["server"] not in versionlist:
+    if data["response-header"].get("server"):
         servers = []
         for server in data["response-header"]["server"].split():
             server = server.strip()
             if not ( server[0] == '(' and server[-1] == ')' ):
                 _ = server.partition('/')
-                servers.append((_[0],_[2]))
+                servers.append((_[0].lower(),_[2].lower()))
         for server in servers:
-            cve = json.loads(subprocess.check_output(["searchsploit",server[0] + ' ' + server[1],"-wj"]))
-            print cve
-        results = [package("vulnerability",data,"The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve["RESULTS"])) + " cve exploits found!")]
+            if server in versionlist:
+                continue
+            versionlist.append(server)
+            cve = subprocess.check_output(["searchsploit",server[0] + ' ' + server[1],"-wj"])
+            cve = cve[cve.find('[')+1:cve.find(']')].split('\n')
+            cve = [ (_.split('|')[0].strip(),_.split('|')[1].strip()) for _ in cve if _.find('|') != -1 ]
+            results.append(package("vulnerability",data,"The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve)) + " cve exploits found!"))
     return results
