@@ -5,6 +5,7 @@ import socket
 import urllib
 import urllib2
 import threading
+import subprocess
 
 with open("source/common-name-list.txt","r") as data:
     names = data.read().strip().split('\n')
@@ -67,6 +68,8 @@ def connect(url,header = {},postdata = {}):
     except:
         return "",{}
     page = response.read().decode("utf-8","ignore")
-    print page[:100]
     info = response.info()
     return page,info
+
+def package(mytype,data,message):
+    return {"type" : mytype, "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "message" : message}

@@ -1,9 +1,10 @@
 import re
 import json
+import subprocess
 
 from bs4 import BeautifulSoup
 
-from lib.utils.utils import appendQueries,iterate,connect
+from lib.utils.utils import appendQueries,iterate,connect,package
 
 def absolute(myrange,domain,url,append):
     if not append:
@@ -85,8 +86,10 @@ def fuzz(mission,data,urllist):
     forms = soup.find_all("form")
     for form in forms:
         url = absolute(mission["range"],mission["domain"],mission["url"],form.get("action"))
+        if not url:
+            continue
         method = form.get("method").lower()
-        keys = [i.get("name") for i in form.find_all("input") + form.find_all("select")]
+        keys = [i["name"] for i in form.find_all("input") + form.find_all("select") if i.get("name")]
         results = mutate(5,[""] * len(keys),"sqli")
         task = []
         for result in results:
@@ -120,23 +123,27 @@ def analyze(mission,data):
         if info.get("Content-Type") and "image" not in info["Content-Type"]:
             results.append(url + " -> this image didn't response with image, it response with type " + info["Content-Type"] + " ( might be CSRF )")
 
-    return [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : results}]
+    return [package("vulnerability",data,results)]
 
 def collect(mission,data):
     results = []
     if mission.get("css-selector"):
         soup = BeautifulSoup(data["response"],'lxml')
         items = soup.select(mission["css-selector"])
-        results = [{"type" : "collection", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : [item.string for item in items if item.string]}]
+        results = [package("collection",data,[item.string for item in items if item.string])]
     return results
 
-def version(mission,data):
+def version(mission,data,versionlist):
     results = []
-    if data["response-header"].get("server"):
-        server = data["response-header"]["server"]
-        print server
-        ver = server[server.find('/')+1:server.find('(')].strip() if server.find('/') != -1 else ""
-        system = server[server.find('('):-1].strip() if server.find('(') != -1 else ""
-        server = server[:server.find('/')] if server.find('/') != -1 else server
-        #results = [{"type" : "vulnerability", "url" : data["url"], "header" : data["header"], "postdata" : data["postdata"], "data" : "The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve)) + " cve exploits found!"}]
+    if data["response-header"].get("server") and data["response-header"]["server"] not in versionlist:
+        servers = []
+        for server in data["response-header"]["server"].split():
+            server = server.strip()
+            if not ( server[0] == '(' and server[-1] == ')' ):
+                _ = server.partition('/')
+                servers.append((_[0],_[2]))
+        for server in servers:
+            cve = json.loads(subprocess.check_output(["searchsploit",server[0] + ' ' + server[1],"-wj"]))
+            print cve
+        results = [package("vulnerability",data,"The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve["RESULTS"])) + " cve exploits found!")]
     return results

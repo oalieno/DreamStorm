@@ -87,12 +87,12 @@ class Manager:
                     aCounter -= 1
                     for d in data:
                         if d["type"] == "vulnerability":
-                            if d["data"]:
-                                self.log.warning(d["url"] + " with " + str(d["header"]) + " and " + str(d["postdata"]) + " -> " + str(d["data"]))
+                            if d["message"]:
+                                self.log.warning(d["url"] + " with " + str(d["header"]) + " and " + str(d["postdata"]) + " -> " + str(d["message"]))
                                 #self.db.store(d)
                         elif d["type"] == "collection":
-                            if d["data"]:
-                                self.log.info(d["url"] + " -> " + str(d["data"]))
+                            if d["message"]:
+                                self.log.info(d["url"] + " -> " + str(d["message"]))
                                 #self.db.store(d)
                         else:
                             if self.config["mode"] == "remote":
