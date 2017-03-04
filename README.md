@@ -2,6 +2,13 @@
 
 Automated Website Analyzer and Intelligence Collection
 
+目前支援功能 : 
+1. 基本的爬蟲功能
+2. CSRF 注入 detection
+3. 檢查伺服器版本自動搜尋相關漏洞 ( 用 searchsploit )
+4. tor 匿名連線
+5. 分散式架構
+
 ## Version
 
 now is on version 2.0
@@ -19,6 +26,10 @@ sudo apt-get install python-bs4
 ```
 sudo apt-get install tor
 ```
+
+### searchsploit ( https://www.exploit-db.com/searchsploit/ )
+
+Kali linux 有內建
 
 ## Usage
 
