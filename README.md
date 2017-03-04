@@ -3,10 +3,15 @@
 Automated Website Analyzer and Intelligence Collection
 
 目前支援功能 : 
+
 1. 基本的爬蟲功能
+
 2. CSRF 注入 detection
+
 3. 檢查伺服器版本自動搜尋相關漏洞 ( 用 searchsploit )
+
 4. tor 匿名連線
+
 5. 分散式架構
 
 ## Version
