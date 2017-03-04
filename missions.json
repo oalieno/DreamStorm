@@ -1,6 +1,7 @@
 [
     {
-        "url" : "https://plus.nctu.edu.tw",
+        "url" : "http://192.168.56.101",
+        "range" : "page",
         "fuzzing" : false
     }
 ]

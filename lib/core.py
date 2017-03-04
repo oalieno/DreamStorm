@@ -140,14 +140,22 @@ def version(mission,data,versionlist):
         for server in data["response-header"]["server"].split():
             server = server.strip()
             if not ( server[0] == '(' and server[-1] == ')' ):
-                _ = server.partition('/')
-                servers.append((_[0].lower(),_[2].lower()))
+                servers.append(server)
         for server in servers:
             if server in versionlist:
                 continue
             versionlist.append(server)
-            cve = subprocess.check_output(["searchsploit",server[0] + ' ' + server[1],"-wj"])
+
+            _ = server.partition('/')
+            framework = _[0]
+            version = _[1]
+
+            cve = subprocess.check_output(["searchsploit",framework + ' ' + version,"-wj"])
             cve = cve[cve.find('[')+1:cve.find(']')].split('\n')
             cve = [ (_.split('|')[0].strip(),_.split('|')[1].strip()) for _ in cve if _.find('|') != -1 ]
-            results.append(package("vulnerability",data,"The server type and version : " + data["response-header"]["server"] + " which has " + str(len(cve)) + " cve exploits found!"))
+            if cve:
+                message = "The server type and version : " + server + " which has " + str(len(cve)) + " cve exploits found!"
+                for i in xrange(min(len(cve),3)):
+                    message += "\n" + " "*18 + cve[i][0] + " -> " + cve[i][1]
+                results.append(package("vulnerability",data,message))
     return results

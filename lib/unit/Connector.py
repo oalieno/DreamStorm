@@ -17,4 +17,4 @@ class Connector:
             if not self.q[0].empty():
                 task = self.q[0].get()
                 page,info = connect(task["url"],task["header"],task["postdata"])
-                self.q[1].put(dict(task.items() + {"response" : page, "response-header" : dict(info)}.items()))
+                self.q[1].put(dict(task.items() + {"response" : page, "response-header" : info}.items()))

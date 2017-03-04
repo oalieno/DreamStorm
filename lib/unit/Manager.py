@@ -88,7 +88,7 @@ class Manager:
                     for d in data:
                         if d["type"] == "vulnerability":
                             if d["message"]:
-                                self.log.warning(d["url"] + " with " + str(d["header"]) + " and " + str(d["postdata"]) + " -> " + str(d["message"]))
+                                self.log.warning(d["url"] + " with " + " -> " + str(d["message"]))
                                 #self.db.store(d)
                         elif d["type"] == "collection":
                             if d["message"]:
@@ -106,7 +106,7 @@ class Manager:
                     data = cQueue[i][1].get()
                     cCounter -= 1
                     if data["response"]:
-                        self.log.info(data["url"])
+                        self.log.debug(data["url"])
                         index = data.pop("index")
                         aQueue[index][0].put(data)
                         aCounter += 1

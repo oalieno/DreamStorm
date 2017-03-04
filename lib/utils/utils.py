@@ -68,7 +68,7 @@ def connect(url,header = {},postdata = {}):
     except:
         return "",{}
     page = response.read().decode("utf-8","ignore")
-    info = response.info()
+    info = dict(response.info())
     return page,info
 
 def package(mytype,data,message):

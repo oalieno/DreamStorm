@@ -6,7 +6,7 @@ from lib.utils.Color import Color
 class Log:
     def __init__(self,name):
         self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.DEBUG)
         self.handler = logging.StreamHandler()
         self.handler.setFormatter(logging.Formatter("[%(levelname)s] %(message)s"))
         self.logger.addHandler(self.handler)

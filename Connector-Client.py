@@ -6,7 +6,7 @@ import Queue
 
 from lib.remote.Client import Client
 from lib.unit.Connector import Connector
-from lib.utils.Utils import daemonThread
+from lib.utils.utils import daemonThread
 from lib.utils.Log import Log
 
 log = Log(__name__)
