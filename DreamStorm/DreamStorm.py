@@ -4,20 +4,23 @@ import random
 from Crawler import Crawler
 from lib.utils import daemonThread
 
+
 class DreamStorm:
-    def __init__(self,threads,tor = False):
+    def __init__(self, threads, tor=False):
         self.counter = 0
         self.threads = threads
         self.tor = tor
-        self.q = (Queue.Queue(),Queue.Queue())
+        self.q = (Queue.Queue(), Queue.Queue())
         self.qq = []
         for i in xrange(self.threads):
-            self.qq.append((Queue.Queue(),Queue.Queue()))
-            c = Crawler(self.qq[-1],self.tor)
+            self.qq.append((Queue.Queue(), Queue.Queue()))
+            c = Crawler(self.qq[-1], self.tor)
             daemonThread(c.run)
+
     def idle(self):
         return self.counter == 0
-    def put(self,url,headers = {},postdata = {}):
+
+    def put(self, url, headers={}, postdata={}):
         if type(url) != list:
             url = [url]
         for _url in url:
@@ -27,13 +30,14 @@ class DreamStorm:
                 "headers": headers,
                 "postdata": postdata
             })
-    def run(self,callback):
+
+    def run(self, callback):
         while self.counter:
             if not self.q[0].empty():
-                rand = random.randint(0,self.threads-1)
+                rand = random.randint(0, self.threads - 1)
                 self.qq[rand][0].put(self.q[0].get())
             for q in self.qq:
                 if not q[1].empty():
                     package = q[1].get()
-                    callback(package[0],package[1])
+                    callback(package[0], package[1])
                     self.counter -= 1
