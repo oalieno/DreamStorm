@@ -9,7 +9,7 @@ def daemonThread(target,args = ()):
     t.daemon = True
     t.start()
 
-def tor():
+def tor_init():
     socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5,"127.0.0.1",9050,True)
     socket.socket = socks.socksocket
 

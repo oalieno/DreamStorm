@@ -1,8 +1,10 @@
-from lib.utils import connect
+from lib.utils import connect,tor_init
 
 class Crawler:
-    def __init__(self,q):
+    def __init__(self,q,tor):
         self.q = q
+        if tor:
+            tor_init()
     def run(self):
         while True:
             if not self.q[0].empty():

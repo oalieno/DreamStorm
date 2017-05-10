@@ -4,15 +4,16 @@ import random
 from Crawler import Crawler
 from lib.utils import daemonThread
 
-class Connector:
-    def __init__(self,threads):
+class DreamStorm:
+    def __init__(self,threads,tor = False):
         self.counter = 0
         self.threads = threads
+        self.tor = tor
         self.q = (Queue.Queue(),Queue.Queue())
         self.qq = []
         for i in xrange(self.threads):
             self.qq.append((Queue.Queue(),Queue.Queue()))
-            c = Crawler(self.qq[-1])
+            c = Crawler(self.qq[-1],self.tor)
             daemonThread(c.run)
     def idle(self):
         return self.counter == 0
