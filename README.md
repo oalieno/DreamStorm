@@ -22,7 +22,7 @@ from DreamStorm import DreamStorm
 def example_callback(page,headers):
     print "server : " + headers["server"]
 
-C = Connector(5,tor = True) # how many threads to use
-C.put(["https://oalieno.github.io","http://www.nctu.edu.tw"])
-C.run(example_callback)
+dream = DreamStorm(5,tor = True) # how many threads to use
+dream.put(["https://oalieno.github.io","http://www.nctu.edu.tw"])
+dream.run(example_callback)
 ```
