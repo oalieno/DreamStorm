@@ -4,5 +4,8 @@ setup.py
 DreamStorm/Crawler.py
 DreamStorm/DreamStorm.py
 DreamStorm/__init__.py
+DreamStorm/lib/Color.py
 DreamStorm/lib/__init__.py
 DreamStorm/lib/utils.py
+DreamStorm/lib/modules/Pager.py
+DreamStorm/lib/modules/__init__.py

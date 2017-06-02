@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from lib.utils import connect, tor_init
 
 
@@ -11,6 +13,5 @@ class Crawler:
         while True:
             if not self.q[0].empty():
                 package = self.q[0].get()
-                result = connect(package["url"], package["headers"],
-                                 package["postdata"])
+                result = connect(package)
                 self.q[1].put(result)
