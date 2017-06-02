@@ -9,13 +9,15 @@ class Pager:
     def __init__(self):
         self.urllist = {}
 
-    def domain(self, url):
+    @staticmethod
+    def domain(url):
         if not url: return None
         head = url.find("//")
         tail = url[head + 2:].find("/")
         return url if tail == -1 else url[:head + 2 + tail]
 
-    def absolute(self, domain, url, append):
+    @staticmethod
+    def absolute(domain, url, append):
         if not append: return None
         if re.search("^//", append) != None: return None
         # If don't have http or https prefix

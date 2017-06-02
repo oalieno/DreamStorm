@@ -23,7 +23,9 @@ class DreamStorm:
             c = Crawler(self.qq[-1], self.tor)
             daemonThread(c.run)
 
-    def put(self, url, headers={}, postdata={}):
+    def put(self, url, headers=None, postdata=None):
+        headers = headers or {}
+        postdata = postdata or {}
         url_list = []
         if type(url) in (dict, str, unicode): url_list = [url]
         elif type(url) in (list, ): url_list = url
