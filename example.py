@@ -6,6 +6,6 @@ def example_callback(package, page, headers):
 
 pager = Pager()
 
-dream = DreamStorm(10, tor=True)
+dream = DreamStorm(10, tor=False)
 dream.put(["http://oalieno.github.io"])
 dream.run(example_callback,pager.callback)
