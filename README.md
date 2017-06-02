@@ -28,6 +28,12 @@ If `pip install DreamStorm` **did not** install beautifulsoup4 as well, use the 
 
 `pip install beautifulsoup4`
 
+### lxml
+
+you might need to install lxml using following command
+
+`pip install lxml`
+
 ## Example
 
 ```python
@@ -47,6 +53,25 @@ dream.run(example_callback,pager.callback)
 pager is a built-in module that can automated crawl through all page in the domain
 
 ## Document
+
+### callback function
+
+A callback function should have three parameter
+
+package -> the original request being sent, it's a dictionary
+
+```
+package = {
+    "url": "https://oalieno.github.io",
+    "headers": {...},
+    "postdata": {...}
+}
+```
+page -> the response html page, it's just a string
+
+headers -> the response headers, it's a dictionary
+
+you can return a dictionary in callback function which represent the new package to be requested
 
 ### DreamStorm.put
 
