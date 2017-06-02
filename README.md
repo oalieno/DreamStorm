@@ -56,7 +56,9 @@ pager is a built-in module that can automated crawl through all page in the doma
 
 ### callback function
 
-A callback function should have three parameter
+A callback function is call when the response is back and you can start handling the response
+
+It should have three parameter
 
 package -> the original request being sent, it's a dictionary
 
