@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import socks
 import socket
 import urllib
@@ -16,8 +18,10 @@ def tor_init():
     socket.socket = socks.socksocket
 
 
-def connect(url, headers, postdata):
-    postdata = urllib.urlencode(postdata)
+def connect(package):
+    url = package["url"]
+    headers = package["headers"]
+    postdata = urllib.urlencode(package["postdata"])
     try:
         if postdata:
             request = urllib2.Request(url, headers=headers, data=postdata)
@@ -26,7 +30,7 @@ def connect(url, headers, postdata):
         opener = urllib2.build_opener()
         response = opener.open(request)
     except:
-        return "", {}
-    page = response.read().decode("utf-8", "ignore")
+        return package, "", {}
+    page = response.read()
     info = dict(response.info())
-    return page, info
+    return package, page, info

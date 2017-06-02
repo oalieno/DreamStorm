@@ -1,10 +1,11 @@
 from DreamStorm import DreamStorm
+from DreamStorm.lib.modules.Pager import Pager
 
+def example_callback(package, page, headers):
+    print package["url"]
 
-def example_callback(page, headers):
-    print "server : " + headers["server"]
+pager = Pager()
 
-
-dream = DreamStorm(5, tor=True)
-dream.put(["https://oalieno.github.io", "http://www.nctu.edu.tw"])
-dream.run(example_callback)
+dream = DreamStorm(10, tor=True)
+dream.put(["http://oalieno.github.io"])
+dream.run(example_callback,pager.callback)
