@@ -10,6 +10,10 @@ Support :
 
 `pip install DreamStorm`
 
+## Scripts
+
+[scripts](/scripts) folder is some script I wrote using DreamStorm library
+
 ## Dependency
 
 ### tor
