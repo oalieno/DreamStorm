@@ -45,7 +45,7 @@ def example_callback(package, page, headers):
 
 pager = Pager()
 
-dream = DreamStorm(10, tor=False)
+dream = DreamStorm(10, tor=False) # 10 means 10 threads
 dream.put(["https://oalieno.github.io"])
 dream.run(example_callback,pager.callback)
 ```
