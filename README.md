@@ -1,12 +1,17 @@
 # DreamStorm
 
-A Crawler Library
+Best Crawler Library Ever
 
-Support : 
+Support :
 - multi-thread
 - tor
 
-## Get Started 
+Advantage :
+- simple
+- flexible
+- powerful
+
+## Get Started
 
 `pip install DreamStorm`
 
@@ -85,7 +90,7 @@ second parameter accept `dict` ( global headers to all urls in this put action )
 
 third parameter accept `dict` ( global postdata to all urls in this put action )
 
-example : 
+example :
 
 `dream.put("https://oalieno.github.io")`
 

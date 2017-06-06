@@ -4,7 +4,7 @@ import Queue
 import random
 
 from Crawler import Crawler
-from lib.utils import daemonThread
+from lib.utils import daemon_thread
 
 
 class DreamStorm:
@@ -21,7 +21,7 @@ class DreamStorm:
         for i in xrange(self.threads):
             self.qq.append((Queue.Queue(), Queue.Queue()))
             c = Crawler(self.qq[-1], self.tor)
-            daemonThread(c.run)
+            daemon_thread(c.run)
 
     def put(self, url, headers=None, postdata=None):
         headers = headers or {}

@@ -7,7 +7,7 @@ import urllib2
 import threading
 
 
-def daemonThread(target, args=()):
+def daemon_thread(target, args=()):
     t = threading.Thread(target=target, args=args)
     t.daemon = True
     t.start()
@@ -34,3 +34,7 @@ def connect(package):
     page = response.read()
     info = dict(response.info())
     return package, page, info
+
+
+def merge_dict(d1,d2):
+    return dict(d1.items() + d2.items())
